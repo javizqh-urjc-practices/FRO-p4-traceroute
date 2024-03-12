@@ -1,0 +1,251 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage{graphicx} %LaTeX package to import graphics
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{lmargin=30mm}
+\usepackage[export]{adjustbox}
+\usepackage{titlesec}
+\titleformat{\chapter}{\normalfont\huge}{\thechapter}{20pt}{\huge\bf}
+\graphicspath{{images/}} %configuring the graphicx package
+\title{Practica 1}
+\author{Javier Izquierdo Hernández}
+\date{\today}
+\begin{document}
+	\begin{titlepage}
+		\centering
+		{\includegraphics[width=0.3\textwidth]{logo}\par}
+		\vspace{1cm}
+		{\bfseries\LARGE Universidad Rey Juan Carlos \par}
+		\vspace{1cm}
+		{\scshape\Large E.T.S. Ingeniería de Telecomunicación \par}
+		\vspace{3cm}
+		{\scshape\Huge Fundamentos de redes de ordenadores \par}
+		\vspace{3cm}
+		{\itshape\Large Práctica 4 \par}
+		\vfill
+		{\Large Autor: \par}
+		{\Large Javier Izquierdo Hernández \par}
+		\vfill
+		{\Large \today \par}
+	\end{titlepage}
+
+\newpage
+\renewcommand{\contentsname}{Contenidos}
+\tableofcontents
+\newpage
+
+\chapter{Escenario A}
+\includegraphics*[width=128mm, scale=0.5, center]{enunciado1}
+\begin{enumerate}
+	\item Observa las direcciones IP que aparecen configuradas en el escenario de red. Comprobarás que todas las máquinas
+	excepto r3 tienen ya configurada su dirección IP. Mira el contenido de la tabla de routing de todas las máquinas
+	(excepto r3)
+	
+	\includegraphics*[width=128mm, scale=0.5, center]{ejercicio1}
+	
+	\item  Comprueba que en pc1 no funciona un ping a la dirección 14.X.0.2. ¿Por qué? Mira atentamente las direcciones
+	IP de pc1, r1-eth0 y r2-eth0. ¿Ves ya lo que pasa? Realiza los cambios necesarios en la configuración de pc1
+	para que dicho ping funcione. Realiza los cambios de forma que pc1 mantenga su nueva configuración aunque se
+	apague y vuelva a encenderse.
+	Haz una captura de tráfico en el fichero p4-a-01.cap que contenga paquetes que demuestren que dicho ping ya
+	funciona adecuadamente.
+	
+	\includegraphics*[width=128mm, scale=0.5, center]{ejercicio2}
+	
+	El ping no llega porque pc1 tiene mal configurada la tabla de routing. La dirección Ip de pc 1 debería ser 14.57.0.100.
+	\item La máquina r3 no tiene configurada la dirección IP en sus interfaces de red. Configura direcciones IP adecuadas
+	para sus interfaces eth0, eth1 y eth2, de forma que dicha configuración se mantenga después de apagar y volver
+	a encender r3. Elige todas las direcciones IP de r3 de forma que terminen en .3.
+	
+	\includegraphics*[width=128mm, scale=0.5, center]{ejercicio3}
+	\item  Realiza los cambios necesarios en las tablas de routing adecuadas para que pc2 y pc3 puedan intercambiar
+	datagramas IP y lo hagan por las siguientes rutas:
+	\begin{itemize}
+		\item Desde pc2 a pc3:       pc2 =\textgreater r3 =\textgreater  pc3
+		\item Desde pc3 a pc2:
+		pc3 =\textgreater r4 =\textgreater r1 =\textgreater r2 =\textgreater pc2
+			
+	\end{itemize}
+	Intenta realizar los mínimos cambios posibles sobre las tablas que ya existen.
+	Ejecuta en pc2 el comando traceroute 18.X.0.100. Comprueba que la salida del comando se corresponde con
+	la ruta de pc2 a pc3 que has configurado.
+	Repite el comando capturando el tráfico que se produce:
+	\begin{itemize}
+		\item captura en el hub2 lanzando tcpdump en r3-eth1 con nombre de fichero p4-a-02.cap
+		\item captura en el hub3 lanzando tcpdump en r4-eth0 con nombre de fichero p4-a-03.cap
+		\item ejecuta en pc2 el comando traceroute 18.X.0.100
+		\item interrumpe las capturas
+	\end{itemize}
+	Analiza el tráfico capturado en ambos ficheros de captura y reconoce en ellos el comportamiento del comando
+	traceroute tal y como se explica en las transparencias de teoría.
+	\item Intenta comprobar ahora la ruta de pc3 a pc2 ejecutando en pc3 el comando traceroute 16.X.0.100. Espera
+	a que termine completamente la ejecución del comando. Posiblemente aparecerán * en alguno de sus pasos.
+	Recordando el comportamiento del traceroute, piensa a qué se deben dichos *. 
+	\includegraphics*[width=128mm, scale=0.5, center]{ejercicio4}\newline
+	Para que no aparezcan, necesitarás
+	configurar rutas para poder volver desde r1 a pc3 y desde r2 a pc3. Introduce esas rutas y repite el comando
+	hasta que funcione completamente sin mostrar ningún *.
+	
+	\includegraphics*[width=128mm, scale=0.5, center]{ejercicio5}
+	\item Realiza los cambios necesarios en las tablas de routing para que pc4 pueda intercambiar datagramas IP con pc1,
+	pc2 y pc3, independientemente de la ruta por la que lo haga. Intenta realizar los mínimos cambios posibles.
+	\item Localiza qué máquinas de entre pc1, pc2, pc3 y pc4 aún no pueden intercambiar datagramas entre sí. Realiza
+	los cambios necesarios para que puedan. Intenta realizar los mínimos cambios posibles.
+	
+	No llegaban los datagramas de pc1 a pc3 y viceversa. Después de modificar las tablas de routing funcinaban todos.
+\end{enumerate}
+\chapter{Escenario B}
+\includegraphics*[width=128mm, scale=0.5, center]{enunciado2}
+\section{Traceroute desde pc1 a r4 y viceversa}
+Supón que se ejecutan los siguientes comandos en pc1 y en r4, obteniéndose los resultados que se muestran:
+\begin{itemize}
+	\item En pc1 se ejecuta el siguiente comando:
+	
+		pc1:\textasciitilde\# traceroute 203.X.0.4
+		
+		traceroute to 203.X.0.4 (203.X.0.4), 64 hops max, 40 byte packets
+		
+		1 200.X.0.1
+		
+		2 202.X.0.2
+		
+		3 203.X.0.4
+		
+	\item En r4 se ejecuta el siguiente comando:
+	
+	r4:\textasciitilde\# traceroute 200.X.0.10
+	
+	traceroute to 200.X.0.10 (200.X.0.10), 64 hops max, 40 byte packets
+	
+	1 203.X.0.2
+	
+	2 202.X.0.1
+	
+	3 200.X.0.10
+	
+\end{itemize}
+\begin{enumerate}
+	\item ¿Cuáles son los routers que se atraviesan para ir desde pc1 a la dirección 203.0.0.4, en función de la salida
+	mostrada?
+	
+	Va desde pc1 a r1 a r2 y a r4.
+	\item ¿Cuáles son los routers que se atraviesan para ir desde r4 a pc1, en función de la salida mostrada?
+	
+	Va desde r4 a r2 a r1 y a pc1.
+	\item Realiza los cambios de configuración en las tablas de routing para que el resultado anterior se produzca en tu
+	escenario. Efectúa sólo los cambios imprescindibles: no modifiques las rutas ni las direcciones IP que ya están
+	configuradas en el escenario, sólo puedes añadir direcciones IP y rutas, cumpliendo además las siguientes
+	restricciones:
+	\begin{itemize}
+		\item En las tablas de routing de las máquinas (pc1 y pc2) sólo puedes añadir rutas por defecto.
+		\item En las tablas de routing de los routers NO puedes añadir rutas por defecto.
+	\end{itemize}
+	Utiliza traceroute sobre el escenario modificado para comprobar que su salida es la misma que la mostrada al
+	principio de este apartado.
+	Captura ahora el tráfico que se produce en el traceroute de pc1 a r4:
+	\begin{itemize}
+		\item lanza tcpdump en r1-eth0 con nombre de fichero p4-b-01.cap
+		\item lanza tcpdump en r2-eth0 con nombre
+		de fichero p4-b-02.cap
+		\item lanza tcpdump en r4-eth2 con nombre
+		de fichero p4-b-03.cap
+		\item ejecuta en pc1 el comando traceroute
+		203.X.0.4
+		\item interrumpe las capturas
+	\end{itemize}
+	Analiza el tráfico capturado en ambos ficheros de captura y reconoce en ellos el comportamiento del comando
+	traceroute tal y como se explica en las transparencias de teoría.
+	
+	Pc1 envía un datagrama con ttl 1 a r1 y r1 le respnde con un datagrama de error de tipo 0 (supero el ttl), luego con ttl 2 , .... y así hasta llegar a su destino que le enviará un datagrama con un mensaje de error tipo 3.
+\end{enumerate}
+\section{Traceroute desde pc1 a pc2}
+Supón que se ejecuta en pc1 un traceroute a pc2 y se obtiene el siguiente resultado:
+
+pc1:\textasciitilde\# traceroute 206.X.0.10
+
+traceroute to 206.X.0.10 (206.X.0.10), 64 hops max, 40 byte packets
+
+1 200.X.0.1
+
+2 202.X.0.2
+
+3 204.X.0.3
+
+4 206.X.0.10
+
+\begin{enumerate}
+	\item ¿Cuáles son los routers que se atraviesan para ir desde pc1 a pc2, en función de la salida producida por
+	traceroute?
+	
+	Va desde pc1 a r1 a r2 a r3 y a pc2
+	\item ¿Por qué en el resultado de traceroute la dirección IP del tercer salto es 204.X.0.3 en vez de 205.X.0.3?
+	
+	Porque al enviar el mensaje de vuelta r3 lo manda desde 204.X.0.3
+	\item Realiza los cambios de configuración en las tablas de routing para que el resultado anterior se produzca en tu
+	escenario. Efectúa sólo los cambios imprescindibles: no modifiques las rutas ni las direcciones IP que ya están
+	configuradas en el escenario, sólo puedes añadir direcciones IP y rutas, cumpliendo además las siguientes
+	restricciones:
+	\begin{itemize}
+		\item En las tablas de routing de las máquinas (pc1 y pc2) sólo puedes añadir rutas por defecto.
+		\item En las tablas de routing de los routers NO puedes añadir rutas por defecto.
+	\end{itemize}
+	Utiliza traceroute sobre el escenario modificado para comprobar que su salida es la misma que la mostrada al
+	principio de este apartado.
+	Captura ahora el tráfico que se produce:
+	\begin{itemize}
+		\item lanza tcpdump en r1-eth0 con nombre de fichero p4-b-04.cap
+		\item lanza tcpdump en r2-eth0 con nombre de fichero p4-b-05.cap
+		\item lanza tcpdump en r3-eth0 con nombre de fichero p4-b-06.cap
+		\item lanza tcpdump en pc2-eth0 con nombre de fichero p4-b-07.cap
+		\item lanza tcpdump en r4-eth1 con nombre de fichero p4-b-08.cap
+		\item ejecuta en pc1 el comando traceroute 206.X.0.10
+		\item interrumpe las capturas
+	\end{itemize}
+	Analiza el tráfico capturado en ambos ficheros de captura y reconoce en ellos el comportamiento del comando
+	traceroute tal y como se explica en las transparencias de teoría.
+	
+	Pc1 envía un datagrama con ttl 1 a r1 y r1 le respnde con un datagrama de error de tipo 0 (supero el ttl), luego con ttl 2 , .... y así hasta llegar a su destino que le enviará un datagrama con un mensaje de error tipo 3.
+\end{enumerate}
+\chapter{Escenario C}
+\includegraphics*[width=128mm, scale=0.5, center]{enunciado3}
+Arranca todas las máquinas de dicho escenario, de una en una, esperando que una máquina haya terminado su
+arranque antes de arrancar la siguiente. Obtendrás un escenario como el que se muestra en la figura 3.
+El escenario no está configurado completamente. Algunas máquinas necesitan configurar rutas. Irás realizando dicha
+configuración a lo largo de los siguientes apartados.
+\section{Caso 1}
+En un escenario como el mostrado en p4-lab-c pero con valor de X = 0 se han ejecutado una o más órdenes y,
+mientras se ejecutaban, se obtuvieron las siguientes capturas:
+\begin{itemize}
+	\item cap1.cap: Captura realizada en la red 200.6.X.0.
+	\item cap2.cap: Captura realizada en la red 200.4.X.0.
+\end{itemize}
+Analiza dichas capturas simultáneamente ya que las dos juntas serán las que te permitirán responder a la siguiente
+cuestión: ¿Qué órdenes se ejectuaron para poder obtener esas capturas?
+
+Se ejecuto ping -c 2 desde pc1 a pc2 y también ping -c 2 -t 3 desde pc1 a pc3.\newline
+
+Modifica en el escenario las rutas necesarias para que se puedan realizar estas capturas al ejecutar dichas órdenes.
+Comprueba tus respuestas ejecutando dichas órdenes sobre tu escenario mientras realizas capturas en las redes
+indicadas:
+\begin{itemize}
+	\item lanza tcpdump en r5-eth1 con nombre de fichero p4-c-01.cap
+	\item lanza tcpdump en r3-eth0 con nombre de fichero p4-c-02.cap
+	\item ejecuta las órdenes para generar el tráfico
+	\item interrumpe las capturas
+\end{itemize}
+Tus capturas deben ser iguales a las que te damos (sin tener en cuenta los posibles paquetes de ARP, y por supuesto,
+teniendo las IPs el valor adecuado de tu X).
+\section{Caso 2}
+En un escenario como el mostrado en p4-lab-c pero con valor de X = 0 se han ejecutado una o más órdenes
+mientras se realizaba la siguiente captura: cap3.cap.
+Analiza la captura para poder responder las siguientes cuestiones: ¿En qué red se ha realizado dicha captura? ¿Qué
+órdenes han tenido que ejecutarse para poder obtener el tráfico de esta captura?
+
+La captura se ha realizado en r3 eth1, en la red 200.8.57.0. Y la orden que se envió fue ping -c 2 200.2.57.20 desde pc3.\newline
+
+Modifica en el escenario las rutas necesarias para que se pueda realizar esta captura al ejecutar dichas órdenes.
+Comprueba tus respuestas ejecutando dichas órdenes sobre tu escenario mientras realizas una captura en la red
+adecuada. Llama a dicho fichero de captura p4-c-03.cap.
+Tu captura debe ser igual a la que te damos (sin tener en cuenta los posibles paquetes de ARP, y por supuesto,
+teniendo las IPs el valor adecuado de tu X).
+\end{document}

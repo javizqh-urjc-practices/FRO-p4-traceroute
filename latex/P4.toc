@@ -1,0 +1,7 @@
+\contentsline {chapter}{\numberline {1}Escenario A}{2}%
+\contentsline {chapter}{\numberline {2}Escenario B}{6}%
+\contentsline {section}{\numberline {2.1}Traceroute desde pc1 a r4 y viceversa}{6}%
+\contentsline {section}{\numberline {2.2}Traceroute desde pc1 a pc2}{8}%
+\contentsline {chapter}{\numberline {3}Escenario C}{10}%
+\contentsline {section}{\numberline {3.1}Caso 1}{10}%
+\contentsline {section}{\numberline {3.2}Caso 2}{11}%
